@@ -22,9 +22,9 @@ public class SigninApi extends HttpServlet {
   
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ServletContext context = request.getServletContext();
+		ServletContext context = request.getServletContext(); // 서블릿 컨테이너와 통신하기 위해서 사용되는 메소드를 지원하는 인터페이스
 		
-		String userJson = request.getParameter("user");
+		String userJson = request.getParameter("user"); // user 가져옴
 		
 		System.out.println(userJson);
 		
