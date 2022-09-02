@@ -43,5 +43,5 @@
 			</main>
 		</div>
 	</body>
-	<script type="text/javascript" src="/static/js/user-management.js"></script>
+	<script type="text/javascript" src="/static/js/auth/user-management.js"></script>
 </html>
