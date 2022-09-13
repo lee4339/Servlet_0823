@@ -45,6 +45,28 @@ public class UserServiceImpl implements UserService {
 		
 		return getGson().toJson(resultMap);
 	}
+	
+	@Override
+	public String updateUser(User user) {
+		
+		int result = userRepository.update(user);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("status", result > 0);
+		
+		return getGson().toJson(resultMap);
+	}
+	
+	@Override
+	public String deleteUser(int userCode) {
+		
+		int result = userRepository.delete(userCode);
+		
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("status", result > 0);
+		
+		return getGson().toJson(resultMap);
+	}
 
 	private Gson getGson() {
 		return new GsonBuilder()
@@ -52,4 +74,6 @@ public class UserServiceImpl implements UserService {
 				.serializeNulls()
 				.create();
 	}
+
+
 }

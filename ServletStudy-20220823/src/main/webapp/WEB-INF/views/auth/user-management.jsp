@@ -13,7 +13,7 @@
 			<header>
 				<h1>사용자 관리 페이지</h1>
 			</header>
-			
+		
 			<main>
 				<div class="input-items">
 					<input type="text" class="user-input" placeholder="아이디">
@@ -22,7 +22,7 @@
 					<input type="text" class="user-input" placeholder="이메일">
 					<button type="button" class="add-button">추가</button>
 				</div>
-				
+			
 				<table>
 					<thead>
 						<tr>
@@ -33,6 +33,7 @@
 							<th>user_email</th>
 							<th>user_phone</th>
 							<th>user_address</th>
+							<th>update</th>
 							<th>delete</th>
 						</tr>
 					</thead>
@@ -41,7 +42,8 @@
 					</tbody>
 				</table>
 			</main>
+		
 		</div>
+		<script type="text/javascript" src="/static/js/auth/user-management.js"></script>
 	</body>
-	<script type="text/javascript" src="/static/js/auth/user-management.js"></script>
 </html>
