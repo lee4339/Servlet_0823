@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.servlet.study.web.domain.user.User;
 import com.servlet.study.web.domain.user.UserRepository;
+import com.servlet.study.web.dto.PrincipalUser;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,19 @@ public class UserServiceImpl implements UserService {
 		
 		return getGson().toJson(resultMap);
 	}
+	
+	@Override
+	public PrincipalUser signin(String userId, String password) {
+		User user = userRepository.findUserByUserId(userId);
+		if(user == null) {
+			return null;
+		}
+		if(user.getUser_password().equals(password)) {
+			return user.toPrincipal();
+		}else {
+			return null;
+		}
+	}
 
 	private Gson getGson() {
 		return new GsonBuilder()
@@ -74,6 +88,5 @@ public class UserServiceImpl implements UserService {
 				.serializeNulls()
 				.create();
 	}
-
 
 }

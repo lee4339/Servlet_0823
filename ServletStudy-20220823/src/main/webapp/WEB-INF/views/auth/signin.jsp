@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
-<link rel="stylesheet" href="/static/css/auth/signup2.css">
+<link rel="stylesheet" href="/static/css/auth/signup.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>

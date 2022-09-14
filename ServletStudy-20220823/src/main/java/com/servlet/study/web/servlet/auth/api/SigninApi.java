@@ -3,30 +3,50 @@ package com.servlet.study.web.servlet.auth.api;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.servlet.study.web.dto.auth.SignupRequestDto;
+import com.servlet.study.web.dto.PrincipalUser;
+import com.servlet.study.web.service.UserService;
 
 @WebServlet("/api/v1/auth/signin")
 public class SigninApi extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private UserService userService;
        
-  
+    public SigninApi() {
+        super();
+    }
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+    	userService = (UserService) config.getServletContext().getAttribute("userService");
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+    	
+    	HttpSession session = request.getSession();
+    	
+    	PrincipalUser principalUser = (PrincipalUser) session.getAttribute("principal");
+    	
+    	response.setContentType("application/json; charset=utf-8");
+    	response.getWriter().print(gson.toJson(principalUser));
+    }
+    
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ServletContext context = request.getServletContext(); // 서블릿 컨테이너와 통신하기 위해서 사용되는 메소드를 지원하는 인터페이스
-		
-		String userJson = request.getParameter("user"); // user 가져옴
-		
-		System.out.println(userJson);
+		String userJson = request.getParameter("user");
 		
 		Gson jsonUser = new GsonBuilder().setPrettyPrinting().create();
 		
@@ -35,28 +55,22 @@ public class SigninApi extends HttpServlet {
 		String userId = jsonObject.get("userId").toString();
 		String userPassword = jsonObject.get("userPassword").toString();
 		
-		SignupRequestDto signupRequestDto = (SignupRequestDto) context.getAttribute("userData");
+		PrincipalUser principalUser = userService.signin(userId, userPassword);
 		
 		Gson responseData = new Gson();
 		JsonObject data = new JsonObject();
 		
-		if(signupRequestDto.getUserId().equals(userId)) {
-			if(signupRequestDto.getUserPassword().equals(userPassword)) {
-				System.out.println("로그인 인증 성공");
-				
-				data.addProperty("status", true);
-				
-				response.setContentType("application/json; charset=utf-8");
-				response.getWriter().print(responseData.toJson(data));
-				return;
-			}
+		if(principalUser == null) {
+			data.addProperty("status", false);
+		}else {
+			data.addProperty("status", true);
+			HttpSession session = request.getSession();
+			session.setAttribute("principal", principalUser);
+			session.setMaxInactiveInterval(60 * 10);
 		}
-		
-		data.addProperty("status", false);
 		
 		response.setContentType("application/json; charset=utf-8");
 		response.getWriter().print(responseData.toJson(data));
-		return;
 		
 	}
 
